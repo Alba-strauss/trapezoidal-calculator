@@ -71,3 +71,4 @@ def index():
 if __name__ == '__main__':
     # Explicit configuration for reliable Windows local serving
     app.run(host='127.0.0.1', port=5000, debug=True)
+    # Deployment Update 2026
