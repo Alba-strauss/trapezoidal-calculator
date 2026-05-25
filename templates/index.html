@@ -81,3 +81,94 @@
         }
     </style>
 </head>
+<body>
+
+<div class="container">
+    <h1>Composite Trapezoidal Rule Calculator</h1>
+
+    <h2>1. Mathematical Discussion</h2>
+    <p>
+        The <strong>Composite Trapezoidal Rule</strong> is a numerical integration method used to approximate the definite integral of a continuous function:
+        $$\int_{a}^{b} f(x) \, dx$$
+        Instead of evaluating the entire interval using a single trapezoid, the interval $[a, b]$ is divided into $n$ equal subintervals, each of width 
+        $h = \frac{b - a}{n}$. The area under the curve is approximated by summing the areas of these smaller trapezoids.
+    </p>
+    <div class="formula-box">
+        <strong>General Formula:</strong>
+        $$\int_{a}^{b} f(x) \, dx \approx \frac{h}{2} \left[ f(a) + 2 \sum_{i=1}^{n-1} f(x_i) + f(b) \right]$$
+        where $x_i = a + i \cdot h$ for $i = 0, 1, \dots, n$.
+    </div>
+
+    <h2>2. Worked Examples (Step-by-Step)</h2>
+    
+    <div class="example-box">
+        <h3>Example 1: Polynomial Integration</h3>
+        <p>Approximate $\int_{0}^{2} x^2 \, dx$ using $n = 4$ subintervals.</p>
+        <ul>
+            <li><strong>Step 1: Compute step size $h$:</strong> $h = \frac{2 - 0}{4} = 0.5$</li>
+            <li><strong>Step 2: Generate grid points ($x_i$):</strong> $x_0 = 0.0, \; x_1 = 0.5, \; x_2 = 1.0, \; x_3 = 1.5, \; x_4 = 2.0$</li>
+            <li><strong>Step 3: Evaluate function values $f(x_i) = x_i^2$:</strong>
+                <br>$f(0.0) = 0.0, \; f(0.5) = 0.25, \; f(1.0) = 1.0, \; f(1.5) = 2.25, \; f(2.0) = 4.0$
+            </li>
+            <li><strong>Step 4: Apply Formula:</strong>
+                $$\int_{0}^{2} x^2 \, dx \approx \frac{0.5}{2} \left[ 0.0 + 2(0.25 + 1.0 + 2.25) + 4.0 \right]$$
+                $$\approx 0.25 \left[ 0.0 + 2(3.5) + 4.0 \right] = 0.25 \left[ 11.0 \right] = 2.75$$
+            </li>
+        </ul>
+        <p><em>Analytical Exact Value: $2.667$ | Approximation: $2.75$</em></p>
+    </div>
+
+    <div class="example-box">
+        <h3>Example 2: Trigonometric Integration</h3>
+        <p>Approximate $\int_{0}^{\pi} \sin(x) \, dx$ using $n = 4$ subintervals.</p>
+        <ul>
+            <li><strong>Step 1: Compute step size $h$:</strong> $h = \frac{\pi - 0}{4} = \frac{\pi}{4} \approx 0.7854$</li>
+            <li><strong>Step 2: Generate grid points ($x_i$):</strong> $x_0 = 0, \; x_1 = \frac{\pi}{4}, \; x_2 = \frac{\pi}{2}, \; x_3 = \frac{3\pi}{4}, \; x_4 = \pi$</li>
+            <li><strong>Step 3: Evaluate function values $f(x_i) = \sin(x_i)$:</strong>
+                <br>$f(0) = 0.0, \; f(\frac{\pi}{4}) \approx 0.7071, \; f(\frac{\pi}{2}) = 1.0, \; f(\frac{3\pi}{4}) \approx 0.7071, \; f(\pi) = 0.0$
+            </li>
+            <li><strong>Step 4: Apply Formula:</strong>
+                $$\int_{0}^{\pi} \sin(x) \, dx \approx \frac{\pi/4}{2} \left[ 0.0 + 2(0.7071 + 1.0 + 0.7071) + 0.0 \right]$$
+                $$\approx 0.3927 \left[ 2(2.4142) \right] \approx 0.3927 \times 4.8284 \approx 1.8961$$
+            </li>
+        </ul>
+        <p><em>Analytical Exact Value: $2.0000$ | Approximation: $1.8961$</em></p>
+    </div>
+
+    <h2>3. Interactive Calculator</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="func">Function $f(x)$:</label>
+            <input type="text" id="func" name="func" value="{{ params.func if params else 'x**2' }}" required>
+            <small style="color: #7f8c8d;">Use Python syntax: e.g., <code>x**2</code>, <code>np.sin(x)</code>, <code>np.exp(x)</code></small>
+        </div>
+        <div class="form-group">
+            <label for="a">Lower Limit ($a$):</label>
+            <input type="number" step="any" id="a" name="a" value="{{ params.a if params else 0 }}" required>
+        </div>
+        <div class="form-group">
+            <label for="b">Upper Limit ($b$):</label>
+            <input type="number" step="any" id="b" name="b" value="{{ params.b if params else 2 }}" required>
+        </div>
+        <div class="form-group">
+            <label for="n">Subintervals ($n$):</label>
+            <input type="number" id="n" name="n" value="{{ params.n if params else 4 }}" required>
+        </div>
+        <button type="submit">Compute Integral</button>
+    </form>
+
+    {% if error %}
+        <div class="error-box">
+            <strong>Execution Error:</strong> {{ error }}
+        </div>
+    {% endif %}
+
+    {% if result is not none %}
+        <div class="result-box">
+            Calculated Integral Value ($I$): <strong>{{ "%.6f"|format(result) }}</strong>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
